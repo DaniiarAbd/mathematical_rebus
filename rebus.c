@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <windows.h>
-#include <time.h>
 
 #define MAX_WORDS 8
 #define MAX_LEN 33
@@ -138,53 +137,10 @@ char *solve_rebus(const char *text){
     return result;
 }
 
-double test(int test_count){
-    srand(time(NULL));
-
-    char **rebus_list = (char**)malloc(test_count * sizeof(char*));
-    char letters[10], wcount, wlen;
-    int pos;
-
-    if(!rebus_list) return 0.0;
-
-    for(int i = 0; i < test_count; i++){
-        rebus_list[i] = (char*)calloc(512, sizeof(char));
-
-        for(int j = 0; j < 10; j++){
-            letters[j] = 'A' + rand() % 26;
-        }
-
-        wcount = 3 + rand() % 6;
-        pos = 0;
-        for(int j = 0; j < wcount; j++){
-            wlen = 1 + rand() % MAX_LEN;
-
-            for(int k = 0; k < wlen; k++){
-                rebus_list[i][pos++] = letters[rand() % 10];
-            }
-            rebus_list[i][pos++] = ' ';
-        }
-    }
-
-    clock_t start = clock();
-    
-    for(int i = 0; i < test_count; i++){
-        free(solve_rebus(rebus_list[i]));
-    }
-
-    clock_t end = clock();
-
-    for(int i = 0; i < test_count; i++){
-        free(rebus_list[i]);
-    }
-    free(rebus_list);
-    return ((double) (end - start)) / CLOCKS_PER_SEC;
-}
-
 int main(){
     SetConsoleCP(CP_UTF8);
     SetConsoleOutputCP(CP_UTF8);
-    /*
+    
     char text[512];
 
     printf("Введите ребус: ");
@@ -200,15 +156,5 @@ int main(){
         printf("Решение: %s\n", answer);
     }
     free(answer);
-    */
-   int n = 10000, r = 10;
-   double time = 0;
-   for(int i = 0; i < r; i++){
-       time += test(n);
-   }
-   time /= r;
-
-   printf("Тестов: %d\n", n);
-   printf("Время: %.3f сек.\n", time);
     return 0;
 }
